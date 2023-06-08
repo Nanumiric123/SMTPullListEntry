@@ -106,6 +106,13 @@ namespace SMTPullListEntry.GETPARTLOC {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GET_BIN_FROM_006", ReplyAction="*")]
         System.Threading.Tasks.Task<System.Data.DataTable> GET_BIN_FROM_006Async(string material);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/getAllPnumWH", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        string[] getAllPnumWH();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/getAllPnumWH", ReplyAction="*")]
+        System.Threading.Tasks.Task<string[]> getAllPnumWHAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -237,6 +244,14 @@ namespace SMTPullListEntry.GETPARTLOC {
         
         public System.Threading.Tasks.Task<System.Data.DataTable> GET_BIN_FROM_006Async(string material) {
             return base.Channel.GET_BIN_FROM_006Async(material);
+        }
+        
+        public string[] getAllPnumWH() {
+            return base.Channel.getAllPnumWH();
+        }
+        
+        public System.Threading.Tasks.Task<string[]> getAllPnumWHAsync() {
+            return base.Channel.getAllPnumWHAsync();
         }
     }
 }

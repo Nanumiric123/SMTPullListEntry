@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SMTPullListEntry.PI_WS;
 
 namespace SMTPullListEntry
 {
@@ -84,45 +85,11 @@ namespace SMTPullListEntry
                 }
             }
         }
+        private ThirdService _TSWS = new ThirdService();
 
         private bool CheckPasswordCorrect(string username,string password)
         {
-            SqlConnection cnn = new SqlConnection(@"Data Source=172.16.206.20;Initial Catalog=IBusiness;User ID=Data_writer;Password=Pasmy@2791381230");
-            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM [IBusiness].[dbo].[ST_SY_User] WHERE [User] = @usr AND [Password] = @pwd", cnn);
-            SqlParameter userparam = new SqlParameter();
-            userparam.Value = username;
-            userparam.ParameterName = "@usr";
-            userparam.SqlDbType = SqlDbType.NVarChar;
-
-            SqlParameter passwordParam = new SqlParameter();
-            passwordParam.Value = password;
-            passwordParam.ParameterName = "@pwd";
-            passwordParam.SqlDbType= SqlDbType.NVarChar;
-
-            cmd.Parameters.Add(userparam);
-            cmd.Parameters.Add(passwordParam);
-            int count = 0;
-            try
-            {
-                cnn.Open();
-                count = (int)cmd.ExecuteScalar();
-            }
-            catch
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            if (count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+           return _TSWS.LOGINSMTPULLLISTENTRY(username,password);
 
         }
     }

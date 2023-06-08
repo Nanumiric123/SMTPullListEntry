@@ -123,6 +123,36 @@ namespace SMTPullListEntry
             }
         }
 
+        private string getNamesFromBadge(string badgeNum)
+        {
+            SqlConnection cnn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            string sqlquery = "SELECT [Name] FROM [IBusiness].[dbo].[ST_SY_User] where [User] = @bnum";
+            SqlDataAdapter da = new SqlDataAdapter(sqlquery,cnn);
+            SqlParameter bnumPara = new SqlParameter();
+            bnumPara.ParameterName = "@bnum";
+            bnumPara.Value = badgeNum;
+            bnumPara.SqlDbType = SqlDbType.NVarChar;
+            da.SelectCommand.Parameters.Add(bnumPara);
+            DataTable dt = new DataTable();
+            
+            try
+            {
+                cnn.Open();
+                da.Fill(dt);
+                return dt.Rows[0][0].ToString();
+            }
+            catch(Exception ex)
+            {
+                return ex.Message.ToString();
+            }
+            finally
+            {
+                cnn.Close();
+            }
+
+
+        }
+
         private string pullListNo(string badgeNum)
         {
             SqlConnection cnn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
@@ -288,7 +318,7 @@ namespace SMTPullListEntry
             Font shiftBFont = new Font();
             shiftBFont.Size = 12;
             shiftBFont.Name = "Times New Roman";
-            shiftBPara.AddFormattedText(bNum, shiftBFont);
+            shiftBPara.AddFormattedText(bNum + " : " + getNamesFromBadge(bNum), shiftBFont);
 
             TextFrame PullListNoTF = sec.AddTextFrame();
             PullListNoTF.WrapFormat.DistanceLeft = Unit.FromMillimeter(125);
@@ -301,19 +331,6 @@ namespace SMTPullListEntry
             PullListNoFont.Size = 12;
             PullListNoFont.Name = "Times New Roman";
             PullListNoPara.AddFormattedText("Pull List No : \t" + f_pulllistNo, PullListNoFont);
-
-            TextFrame SMTTF = sec.AddTextFrame();
-            SMTTF.WrapFormat.DistanceLeft = Unit.FromMillimeter(82);
-            SMTTF.WrapFormat.DistanceTop = Unit.FromMillimeter(-20);
-            SMTTF.Width = Unit.FromMillimeter(125);
-            SMTTF.Height = Unit.FromMillimeter(10);
-            //SMTTF.LineFormat.Color = Colors.Black;
-
-            Paragraph SMTPara = SMTTF.AddParagraph();
-            Font SMTFont = new Font();
-            SMTFont.Size = 12;
-            SMTFont.Name = "Times New Roman";
-            SMTPara.AddFormattedText("SMT 6", SMTFont);
 
             TextFrame TimeRequestTF = sec.AddTextFrame();
             TimeRequestTF.WrapFormat.DistanceLeft = Unit.FromMillimeter(125);
@@ -409,7 +426,7 @@ namespace SMTPullListEntry
                 nrows.Cells[0].AddParagraph(i.ToString());
                 nrows.Cells[1].AddParagraph(dr["PART_NUMBER"].ToString());
                 nrows.Cells[2].AddParagraph(dr["SHORTAGE_QTY"].ToString());
-                nrows.Cells[3].AddParagraph(dr["RECEIVED_QTY"].ToString());
+                nrows.Cells[3].AddParagraph(" ");
                 nrows.Cells[4].AddParagraph(dr["REF_LOC"].ToString());
                 nrows.Cells[5].AddParagraph(dr["REF_NUM_REEL"].ToString());
                 nrows.Cells[6].AddParagraph(dr["StandardQty"].ToString());

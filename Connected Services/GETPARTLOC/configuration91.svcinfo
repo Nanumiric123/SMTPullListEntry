@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="Ejgsr2dj0/40cxac2d2ZpYZPnYBrDnYIu/us5AXPDzc=">
+<SavedWcfConfigurationInformation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Version="9.1" CheckSum="ifhrJTJCGuVgf1L/cncueQMjFd/bSlHs8QXejuHLii0=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="Local_Ws_secondSoap">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="Local_Ws_secondSoap" contract="GETPARTLOC.Local_Ws_secondSoap" bindingType="basicHttpBinding" address="http://172.16.206.19/PART_INFO/Local_Ws_second.asmx" bindingConfiguration="Local_Ws_secondSoap">
+    <endpoint name="Local_Ws_secondSoap" contract="GETPARTLOC.Local_Ws_secondSoap" bindingType="basicHttpBinding" address="http://pasmyapps/PART_INFO/Local_Ws_second.asmx" bindingConfiguration="Local_Ws_secondSoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://172.16.206.19/PART_INFO/Local_Ws_second.asmx</serializedValue>
+          <serializedValue>http://pasmyapps/PART_INFO/Local_Ws_second.asmx</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

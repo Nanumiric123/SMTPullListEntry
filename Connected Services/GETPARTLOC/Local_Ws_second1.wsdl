@@ -235,6 +235,21 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="getAllPnumWH">
+        <s:complexType />
+      </s:element>
+      <s:element name="getAllPnumWHResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getAllPnumWHResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="HelloWorldSoapIn">
@@ -315,6 +330,12 @@
   <wsdl:message name="GET_BIN_FROM_006SoapOut">
     <wsdl:part name="parameters" element="tns:GET_BIN_FROM_006Response" />
   </wsdl:message>
+  <wsdl:message name="getAllPnumWHSoapIn">
+    <wsdl:part name="parameters" element="tns:getAllPnumWH" />
+  </wsdl:message>
+  <wsdl:message name="getAllPnumWHSoapOut">
+    <wsdl:part name="parameters" element="tns:getAllPnumWHResponse" />
+  </wsdl:message>
   <wsdl:portType name="Local_Ws_secondSoap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
@@ -367,6 +388,10 @@
     <wsdl:operation name="GET_BIN_FROM_006">
       <wsdl:input message="tns:GET_BIN_FROM_006SoapIn" />
       <wsdl:output message="tns:GET_BIN_FROM_006SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getAllPnumWH">
+      <wsdl:input message="tns:getAllPnumWHSoapIn" />
+      <wsdl:output message="tns:getAllPnumWHSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Local_Ws_secondSoap" type="tns:Local_Ws_secondSoap">
@@ -481,6 +506,15 @@
     </wsdl:operation>
     <wsdl:operation name="GET_BIN_FROM_006">
       <soap:operation soapAction="http://tempuri.org/GET_BIN_FROM_006" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAllPnumWH">
+      <soap:operation soapAction="http://tempuri.org/getAllPnumWH" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -608,13 +642,22 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getAllPnumWH">
+      <soap12:operation soapAction="http://tempuri.org/getAllPnumWH" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Local_Ws_second">
     <wsdl:port name="Local_Ws_secondSoap" binding="tns:Local_Ws_secondSoap">
-      <soap:address location="http://172.16.206.19/PART_INFO/Local_Ws_second.asmx" />
+      <soap:address location="http://pasmyapps/PART_INFO/Local_Ws_second.asmx" />
     </wsdl:port>
     <wsdl:port name="Local_Ws_secondSoap12" binding="tns:Local_Ws_secondSoap12">
-      <soap12:address location="http://172.16.206.19/PART_INFO/Local_Ws_second.asmx" />
+      <soap12:address location="http://pasmyapps/PART_INFO/Local_Ws_second.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

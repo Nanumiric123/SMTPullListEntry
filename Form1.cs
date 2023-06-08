@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using SMTPullListEntry.PI_WS;
 
 namespace SMTPullListEntry
 {
@@ -19,6 +21,8 @@ namespace SMTPullListEntry
         private int gReelQty;
         private string gMaterial;
         private SqlConnection cnn;
+        private List<DATAFROMFILE> dataFromFile = new List<DATAFROMFILE>();
+
         public Form1()
         {
             InitializeComponent();
@@ -50,9 +54,10 @@ namespace SMTPullListEntry
                         DataRow[] sapDataRow2602 = MatLoc.Select("StorageLocation=2602");
                         DataRow[] sapDataRow2006 = MatLoc.Select("StorageLocation=2006");
                         DataRow[] sapDataRow2001 = MatLoc.Select("StorageLocation=2001");
-                        if (MatLoc.Rows.Count <= 0)
+                        if (sapDataRow2602.Length == 0 && sapDataRow2006.Length == 0 && sapDataRow2001.Length ==0)
                         {
                             MessageBox.Show("No items in PASMY");
+                            txtMaterial.Clear();
                         }
                         else
                         {
@@ -156,35 +161,13 @@ namespace SMTPullListEntry
 
         private List<string> getListOfMaterialForSuggestion()
         {
+            Local_Ws_secondSoapClient client = new Local_Ws_secondSoapClient();
             List<string> materials = new List<string>();
 
-            SqlCommand cmd = new SqlCommand("SELECT DISTINCT [MATERIAL] FROM [IBusinessTest].[dbo].[SMT2006TRIGERRING]", cnn);
-
-            try
+            foreach(var item in client.getAllPnumWH())
             {
-                cnn.Open();
-                using (cmd)
-                {
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string resultMaterial = reader.GetString(0);
-                            materials.Add(resultMaterial);
-                        }
-                    }
-                }
+                materials.Add(item);
             }
-            catch
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-
-
             return materials;
         }
 
@@ -306,7 +289,7 @@ namespace SMTPullListEntry
             {
                 // Get the data from each cell in the row
                 string cell1Value = row.Cells[0].Value.ToString();
-                deleteFromSQL(cell1Value);
+                deleteFromSQL(cell1Value,txtBnum.Text);
 
             }
 
@@ -334,132 +317,40 @@ namespace SMTPullListEntry
             }
         }
 
-      
 
+        private ThirdService _WSTS = new ThirdService();
         private int getQuantityPerReel(string material)
         {
 
-            SqlCommand cmd = new SqlCommand("SELECT [REEL] FROM [IBusinessTest].[dbo].[SMT2006TRIGERRING] where [MATERIAL] = @mat", cnn);
-            SqlParameter param = new SqlParameter();
-            param.SqlDbType = SqlDbType.NVarChar;
-            param.ParameterName = "@mat";
-            param.Value = material;
-            cmd.Parameters.Add(param);
-            int qty = 0;
-            try
-            {
-                cnn.Open();
-                qty = (int)cmd.ExecuteScalar();
 
-                return qty;
-            }
-            catch (Exception ex)
+            int qty = _WSTS.QTYPERREELPULLLISTENTRY(material);
+
+            if(qty <= 0)
             {
                 LBLMESSAGE.Visible = true;
                 LBLMESSAGE.Text = "WARNING : Theres no reel quantity \n data in SMT Trigerring";
-                return 0;
-
             }
-            finally
-            {
-                cnn.Close();
 
-            }
+            return qty;
+            
 
 
         }
 
         private void regenerateDG(string badgeNum)
         {
-            DataTable dt = new DataTable();
-            SqlDataAdapter da = new SqlDataAdapter("SELECT [PART_NUMBER],[SHORTAGE_QTY],[RECEIVED_QTY],[REF_LOC],[PRINTED],[REF_NUM_REEL] FROM [IBusinessTest].[dbo].[SMT_PULLLIST] WHERE [PRINTED] = '0' and [BADGE] = @bad ", cnn);
-            SqlParameter p = new SqlParameter();
-            p.ParameterName = "@bad";
-            p.Value = badgeNum;
-            p.SqlDbType = SqlDbType.NVarChar;
-
-            da.SelectCommand.Parameters.Add(p);
-
-            try
-            {
-                cnn.Open();
-                da.Fill(dt);
-            }
-            catch
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-
-            datagridReqData.DataSource = dt;
-
+            datagridReqData.DataSource = _WSTS.GETDATAFROMSMTPULLLIST(badgeNum);
         }
-        private void deleteFromSQL(string material)
+
+        private void deleteFromSQL(string material,string badgeNum)
         {
-
-            SqlCommand cmd = new SqlCommand("DELETE FROM [dbo].[SMT_PULLLIST] WHERE [PART_NUMBER] = @mat", cnn);
-
-            SqlParameter Matparam = new SqlParameter();
-            Matparam.SqlDbType = SqlDbType.NVarChar;
-            Matparam.ParameterName = "@mat";
-            Matparam.Value = material;
-            cmd.Parameters.Add(Matparam);
-            try
-            {
-                cnn.Open();
-
-                cmd.ExecuteNonQuery();
-            }
-            catch
-            {
-            }
-            finally
-            {
-                cnn.Close();
-            }
+            _WSTS.DELETEFROMSMTPULLLIST(material,badgeNum);
+            return;
         }
 
         public int getMaterialQuantityPerReel(string mat)
         {
-            if(cnn == null)
-            {
-                cnn = new SqlConnection(@"Data Source=172.16.206.20;Initial Catalog=IBusinessTest;User ID=Data_writer;Password=Pasmy@2791381230");
-            }
-            SqlCommand cmd = new SqlCommand("SELECT [MATERIAL],[REEL] FROM [IBusinessTest].[dbo].[SMT2006TRIGERRING] WHERE [MATERIAL] = @material", cnn);
-            SqlParameter matPara = new SqlParameter();
-            matPara.ParameterName = "@material";
-            matPara.Value = mat;
-            matPara.SqlDbType = SqlDbType.NVarChar;
-            cmd.Parameters.Add(matPara);
-            int resultQtyPerReel = 0;
-            try
-            {
-                cnn.Open();
-                using (cmd)
-                {
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string resultMaterial = reader.GetString(0);
-                            Int32 resultQty = reader.GetInt32(1);
-                            resultQtyPerReel = resultQty;
-                        }
-                    }
-                }
-            }
-            catch
-            {
-
-            }
-            finally
-            {
-                cnn.Close();
-            }
-            return resultQtyPerReel;
+            return _WSTS.GETMATERIALQUANTITYPERREEL(mat);
         }
 
         private bool checkAndTriggerIfWrongPnum(string Pnum)
@@ -486,8 +377,8 @@ namespace SMTPullListEntry
             Matparam.ParameterName = "@mat";
             Matparam.Value = gMaterial;
             cmd.Parameters.Add(Matparam);
-            int reqQty = 0;
 
+            int reqQty = 0;
 
             try
             {
@@ -539,8 +430,7 @@ namespace SMTPullListEntry
             {
                 try
                 {
-                    cnn.Open();
-                    cmd.ExecuteNonQuery();
+                    _WSTS.SAVEPULLLISTDATA(gMaterial, txtQty.Text,gReelQty,gLocation,txtBnum.Text);
                 }
                 catch (Exception ex)
                 {
@@ -548,7 +438,6 @@ namespace SMTPullListEntry
                 }
                 finally
                 {
-                    cnn.Close();
                     regenerateDG(txtBnum.Text);
                     LBLMESSAGE.Visible = false;
                     lblLocation.Text = "Location : ";
@@ -563,5 +452,13 @@ namespace SMTPullListEntry
                 }
             }
         }
+
+    }
+
+    public class DATAFROMFILE
+    {
+        public string partNo { get; set; }
+        public int reqQTY { get; set; }
+
     }
 }

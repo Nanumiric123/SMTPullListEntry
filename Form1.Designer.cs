@@ -40,7 +40,6 @@
             this.datagridReqData = new System.Windows.Forms.DataGridView();
             this.PART_NUMBER = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SHORTAGE_QTY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RECEIVED_QTY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.REF_LOC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PRINTED = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.REF_NUM_REEL = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -149,7 +148,6 @@
             this.datagridReqData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.PART_NUMBER,
             this.SHORTAGE_QTY,
-            this.RECEIVED_QTY,
             this.REF_LOC,
             this.PRINTED,
             this.REF_NUM_REEL});
@@ -174,13 +172,6 @@
             this.SHORTAGE_QTY.HeaderText = "Shortage Qty";
             this.SHORTAGE_QTY.Name = "SHORTAGE_QTY";
             this.SHORTAGE_QTY.ReadOnly = true;
-            // 
-            // RECEIVED_QTY
-            // 
-            this.RECEIVED_QTY.DataPropertyName = "RECEIVED_QTY";
-            this.RECEIVED_QTY.HeaderText = "Received Qty";
-            this.RECEIVED_QTY.Name = "RECEIVED_QTY";
-            this.RECEIVED_QTY.ReadOnly = true;
             // 
             // REF_LOC
             // 
@@ -273,7 +264,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1052, 469);
+            this.ClientSize = new System.Drawing.Size(1053, 473);
             this.Controls.Add(this.lbl_qtyPerReel);
             this.Controls.Add(this.lblBadgeNum);
             this.Controls.Add(this.txtBnum);
@@ -310,18 +301,17 @@
         private System.Windows.Forms.Label lblLocation;
         private System.Windows.Forms.Label lblReelNum;
         private System.Windows.Forms.DataGridView datagridReqData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PART_NUMBER;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SHORTAGE_QTY;
-        private System.Windows.Forms.DataGridViewTextBoxColumn RECEIVED_QTY;
-        private System.Windows.Forms.DataGridViewTextBoxColumn REF_LOC;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PRINTED;
-        private System.Windows.Forms.DataGridViewTextBoxColumn REF_NUM_REEL;
         private System.Windows.Forms.Label LBLMESSAGE;
         private System.Windows.Forms.Button btnGeneratePullList;
         private System.Windows.Forms.Button btnDeleteSelected;
         private System.Windows.Forms.TextBox txtBnum;
         private System.Windows.Forms.Label lblBadgeNum;
         private System.Windows.Forms.Label lbl_qtyPerReel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PART_NUMBER;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SHORTAGE_QTY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn REF_LOC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PRINTED;
+        private System.Windows.Forms.DataGridViewTextBoxColumn REF_NUM_REEL;
     }
 }
 

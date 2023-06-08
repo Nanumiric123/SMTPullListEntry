@@ -19,11 +19,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://172.16.206.19/PART_INFO/Local_Ws_second.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://pasmyapps/PART_INFO/Local_Ws_second.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Local_Ws_second.wsdl" MetadataType="Wsdl" ID="9e6fe614-d6a5-4926-b2ea-2f8ad0706327" SourceId="1" SourceUrl="http://172.16.206.19/PART_INFO/Local_Ws_second.asmx?wsdl" />
-    <MetadataFile FileName="Local_Ws_second.disco" MetadataType="Disco" ID="b7888392-a2b7-4659-8788-e34cacd821ad" SourceId="1" SourceUrl="http://172.16.206.19/PART_INFO/Local_Ws_second.asmx?disco" />
+    <MetadataFile FileName="Local_Ws_second1.disco" MetadataType="Disco" ID="f22094eb-1001-4edb-9cf8-3dcce5f655b4" SourceId="1" SourceUrl="http://pasmyapps/PART_INFO/Local_Ws_second.asmx?disco" />
+    <MetadataFile FileName="Local_Ws_second1.wsdl" MetadataType="Wsdl" ID="15788130-2d31-42df-afd7-7453c715481c" SourceId="1" SourceUrl="http://pasmyapps/PART_INFO/Local_Ws_second.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
